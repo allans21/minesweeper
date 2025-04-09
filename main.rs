@@ -1,6 +1,7 @@
 mod tiles;
 
 fn main() {
-    let t: tiles::tile_display = Default::default();
-    println!("{}", t.bomb);
+    let mut gameboard: tiles::Board = tiles::Board::generate(5,5,5);
+    gameboard.revealed = 1;
+    println!("{}", gameboard.revealed);
     }
