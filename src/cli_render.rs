@@ -1,5 +1,8 @@
+// mod cli_renders;
 use std::usize;
 use crate::tiles::*;
+use crate::render::*;
+
 
 pub struct TileDisplay{
     pub bomb: String,
@@ -19,6 +22,17 @@ impl Default for TileDisplay{
     }
 }
 
+pub struct CLIRender;
+
+impl Render for CLIRender{
+    fn render_board( &self, board: &Board){
+        print_hor(board.x);
+        for i in 0..board.tiles.len(){
+            print_tiles(&board.tiles[i]);
+        }
+        print_hor(board.x);
+    }
+}
 
 fn print_hor(len: usize){
     for i in 0..len{
@@ -46,10 +60,3 @@ fn print_tiles(tiles: &Vec<Tile>){
     println!();
 }
 
-pub fn render_board(board: &Board){
-    print_hor(board.x);
-    for i in 0..board.tiles.len(){
-        print_tiles(&board.tiles[i]);
-    }
-    print_hor(board.x);
-}
