@@ -1,12 +1,11 @@
 use crate::interface;
 use crate::interface::*;
-use crate::tiles::*;
 use std::io;
 
 pub struct CLIInterface;
 
 impl Interface for CLIInterface{
-    fn process_input(&self, board: &Board) -> (usize, usize, interface::Interactions){
+    fn process_input(&self) -> (usize, usize, interface::Interactions){
         println!("Enter guess in the form Letter:Number:C/F");
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read line");

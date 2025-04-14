@@ -1,4 +1,3 @@
-use crate::tiles::Board;
 use std::fmt;
 
 pub enum Interactions{
@@ -18,5 +17,5 @@ impl fmt::Display for Interactions {
 }
 
 pub trait Interface{
-    fn process_input(&self, board: &Board) -> (usize, usize, Interactions);
+    fn process_input(&self) -> (usize, usize, Interactions);
 }

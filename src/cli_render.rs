@@ -1,6 +1,6 @@
 // mod cli_renders;
 use std::usize;
-use crate::tiles::*;
+use crate::board::*;
 use crate::render::*;
 
 
@@ -31,6 +31,14 @@ impl Render for CLIRender{
             print_tiles(&board.tiles[i]);
         }
         print_hor(board.x);
+    }
+
+    fn winner(&self){
+        println!("YOU WIN");
+    }
+
+    fn loser(&self){
+        println!("YOU DIEDED");
     }
 }
 
