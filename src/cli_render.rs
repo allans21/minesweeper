@@ -62,7 +62,6 @@ fn print_tiles(tiles: &Vec<Tile>){
                 if tiles[i].adj_bombs > 0{print!("{}", tiles[i].adj_bombs);}
                 else {print!("{}", basic.revealed);}
             }
-            print!("{}", basic.revealed);
         }
         else if tiles[i].flag {
             print!("{}", basic.flag);

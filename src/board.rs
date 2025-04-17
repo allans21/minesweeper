@@ -37,28 +37,28 @@ impl Board {
                 if board.tiles[x][y].bomb{
                     //increment all neighbors by one
                     if x > 0 && y > 0 {
-                        board.tiles[x-1][y-1].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x-1][y-1].adj_bombs = board.tiles[x-1][y-1].adj_bombs+1;
                     }
                     if x > 0 {
-                        board.tiles[x-1][y].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x-1][y].adj_bombs = board.tiles[x-1][y].adj_bombs+1;
                     }
                     if x > 0 && y < y_val-1 {
-                        board.tiles[x-1][y+1].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x-1][y+1].adj_bombs = board.tiles[x-1][y+1].adj_bombs+1;
                     }
                     if y > 0 {
-                        board.tiles[x][y-1].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x][y-1].adj_bombs = board.tiles[x][y-1].adj_bombs+1;
                     }
                     if y < y_val-1 {
-                        board.tiles[x][y+1].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x][y+1].adj_bombs = board.tiles[x][y+1].adj_bombs+1;
                     }
                     if x < x_val-1 && y > 0 {
-                        board.tiles[x+1][y-1].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x+1][y-1].adj_bombs = board.tiles[x+1][y-1].adj_bombs+1;
                     }
                     if x < x_val-1 {
-                        board.tiles[x+1][y].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x+1][y].adj_bombs = board.tiles[x+1][y].adj_bombs+1;
                     }
                     if x < x_val-1 && y < y_val-1 {
-                        board.tiles[x+1][y+1].adj_bombs = board.tiles[x][y].adj_bombs+1;
+                        board.tiles[x+1][y+1].adj_bombs = board.tiles[x+1][y+1].adj_bombs+1;
                     }
                 }
             }
@@ -73,24 +73,47 @@ impl Board {
         match input.2{
             Interactions::click=>{
                 //reveal clicked tile and every tile next to it that is not touching a bomb
-                self.tiles[input.0][input.1].revealed = true;
                 let mut vec = Vec::new();
                 vec.push((input.0, input.1));
-                let mut visited: Vec<Vec<bool>> = vec![vec! [false; self.x]; self.y];
+                // let mut visited: Vec<Vec<bool>> = vec![vec! [false; self.x]; self.y];
                 while !(vec.is_empty()){
                     //pop the vec
                     let working = vec.pop();
                     match working{
                         Some(val) =>{
-                            visited[val.0][val.1] = true;
-                            //check if next to a bomb, if so label how many bombs and do not add neighbors
+                            // visited[val.0][val.1] = true;
+                            self.tiles[val.0][val.1].revealed = true;
+                            // only look at neighbor tiles if there is not an adjacent bomb
+                            if self.tiles[val.0][val.1].adj_bombs == 0{
+                                if val.0 > 0 && val.1 > 0 {
+                                    if self.tiles[val.0-1][val.1-1].revealed == false {vec.push((val.0-1, val.1-1));}
+                                }
+                                if val.0 > 0 {
+                                    if self.tiles[val.0-1][val.1].revealed == false {vec.push((val.0-1, val.1));}
+                                }
+                                if val.0 > 0 && val.1 < self.y-1 {
+                                    if self.tiles[val.0-1][val.1+1].revealed == false {vec.push((val.0-1, val.1+1));}
+                                }
+                                if val.1 > 0 {
+                                    if self.tiles[val.0][val.1-1].revealed == false {vec.push((val.0, val.1-1));}
+                                }
+                                if val.1 < self.y-1 {
+                                    if self.tiles[val.0][val.1+1].revealed == false {vec.push((val.0, val.1+1));}
+                                }
+                                if val.0 < self.x-1 && val.1 > 0 {
+                                    if self.tiles[val.0+1][val.1-1].revealed == false {vec.push((val.0+1, val.1-1));}
+                                }
+                                if val.0 < self.x-1 {
+                                    if self.tiles[val.0+1][val.1].revealed == false {vec.push((val.0+1, val.1));}
+                                }
+                                if val.0 < self.x-1 && val.1 < self.y-1 {
+                                    if self.tiles[val.0+1][val.1+1].revealed == false {vec.push((val.0+1, val.1+1));}
+                                }
+                            }
                         },
                         None => break,
                     }
-
                 }
-
-
             }
             Interactions::flag=>{
                 self.tiles[input.0][input.1].flag = true;
