@@ -14,20 +14,20 @@ impl Interface for CLIInterface{
 
         let process: Vec<&str> =input.split(":").collect();
 
-        let mut opt = interface::Interactions::parse_error;
+        let mut opt = interface::Interactions::ParseError;
         let mut x: usize = 0;
-        let mut y: usize=0;
+        let mut y: usize = 0;
 
         if process.len() == 3 {
             x = (process[0].as_bytes()[0] - 65) as usize;
-            y = process[1].parse().expect("Failed to parse second arg as int");
+            y = process[1].parse().expect("Failed to parse second arg as int"); //TODO needs more robust check
 
             println!("{}", process[2]);
             if &process[2][..1] == "C" {
-                opt = interface::Interactions::click;
+                opt = interface::Interactions::Click;
             }
             else if &process[2][..1] == "F"{
-                opt = interface::Interactions::flag;
+                opt = interface::Interactions::Flag;
             }
         }
 

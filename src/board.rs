@@ -1,4 +1,5 @@
 use crate::interface::Interactions;
+use rand::Rng;
 
 #[derive(Clone, Default)]
 pub struct Tile { // TODO replace flag and revealed with a String/char. this will either be hidden, bomb or the number of bomb neighbors
@@ -10,25 +11,38 @@ pub struct Tile { // TODO replace flag and revealed with a String/char. this wil
 
 pub struct Board {
     pub tiles: Vec<Vec<Tile>>,
-    pub revealed: u8,
+    pub revealed_tiles: u16,
     pub bombs: u8,
     pub x: usize,
     pub y: usize,
+}
+
+pub enum BoardState{
+    Win,
+    Loss,
+    Ongoing,
 }
 
 impl Board {
     pub fn generate(b: u8, x_val: usize, y_val :usize)->Board {
         let mut board = Board {
             bombs: b,
-            revealed: 0,
+            revealed_tiles: 0,
             tiles: vec![vec![Tile::default(); x_val]; y_val],
             x: x_val,
             y: y_val,
         };
 
-        //TODO for now down the middle, make this random
-        for i in 0..x_val{
-            board.tiles[i][i].bomb = true;
+        //place bombs
+        let mut bomb_count: u8 =0;
+        let mut rng = rand::rng();
+        while bomb_count < b{
+            let x: usize = rng.random_range(0..x_val);
+            let y: usize = rng.random_range(0..y_val);
+            if board.tiles[x][y].bomb == false{
+                board.tiles[x][y].bomb = true;
+                bomb_count = bomb_count + 1;
+            }
         }
 
         //find the adjacent bombs
@@ -68,21 +82,22 @@ impl Board {
         return board;
     }
 
-    pub fn update(&mut self, input: &(usize, usize, Interactions)){
-        println!("Enter guess in the form Letter:Number:C/F");
+    pub fn update(&mut self, input: &(usize, usize, Interactions)) -> BoardState{
+        println!("Enter guess in the form Letter:Number:C/F"); //TODO this should be moved to the cli_interface
+        let mut bs: BoardState = BoardState::Ongoing;
         match input.2{
-            Interactions::click=>{
+            Interactions::Click=>{
                 //reveal clicked tile and every tile next to it that is not touching a bomb
                 let mut vec = Vec::new();
                 vec.push((input.0, input.1));
-                // let mut visited: Vec<Vec<bool>> = vec![vec! [false; self.x]; self.y];
+
                 while !(vec.is_empty()){
                     //pop the vec
                     let working = vec.pop();
                     match working{
                         Some(val) =>{
-                            // visited[val.0][val.1] = true;
                             self.tiles[val.0][val.1].revealed = true;
+                            self.revealed_tiles= self.revealed_tiles + 1; //count for game win
                             // only look at neighbor tiles if there is not an adjacent bomb
                             if self.tiles[val.0][val.1].adj_bombs == 0{
                                 if val.0 > 0 && val.1 > 0 {
@@ -114,13 +129,17 @@ impl Board {
                         None => break,
                     }
                 }
+
+                if self.tiles[input.0][input.1].bomb{bs = BoardState::Loss;}
+                else if (self.bombs as u16 + self.revealed_tiles) as usize == self.x * self.y {bs = BoardState::Win;}
             }
-            Interactions::flag=>{
+            Interactions::Flag=>{
                 self.tiles[input.0][input.1].flag = true;
             }
-            Interactions::parse_error=>{
-                println!("Error with input, no change made");
+            Interactions::ParseError=>{
+                println!("Error with input, no change made"); //TODO, this needs to be controlled by the interface
             }
         }
+        return bs;
     }
 }
