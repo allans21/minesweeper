@@ -89,6 +89,7 @@ impl Board {
             Interactions::Click=>{
                 //reveal clicked tile and every tile next to it that is not touching a bomb
                 let mut vec = Vec::new();
+                let mut visited: Vec<Vec<bool>> = vec![vec![false; self.x]; self.y];
                 vec.push((input.0, input.1));
 
                 while !(vec.is_empty()){
@@ -101,35 +102,35 @@ impl Board {
                             // only look at neighbor tiles if there is not an adjacent bomb
                             if self.tiles[val.0][val.1].adj_bombs == 0{
                                 if val.0 > 0 && val.1 > 0 {
-                                    if self.tiles[val.0-1][val.1-1].revealed == false {vec.push((val.0-1, val.1-1));}
+                                    if self.tiles[val.0-1][val.1-1].revealed == false && visited[val.0-1][val.1-1] == false {vec.push((val.0-1, val.1-1)); visited[val.0-1][val.1-1] = true;}
                                 }
                                 if val.0 > 0 {
-                                    if self.tiles[val.0-1][val.1].revealed == false {vec.push((val.0-1, val.1));}
+                                    if self.tiles[val.0-1][val.1].revealed == false && visited[val.0-1][val.1] == false {vec.push((val.0-1, val.1)); visited[val.0-1][val.1] = true;}
                                 }
                                 if val.0 > 0 && val.1 < self.y-1 {
-                                    if self.tiles[val.0-1][val.1+1].revealed == false {vec.push((val.0-1, val.1+1));}
+                                    if self.tiles[val.0-1][val.1+1].revealed == false && visited[val.0-1][val.1+1] == false {vec.push((val.0-1, val.1+1)); visited[val.0-1][val.1+1] = true;}
                                 }
                                 if val.1 > 0 {
-                                    if self.tiles[val.0][val.1-1].revealed == false {vec.push((val.0, val.1-1));}
+                                    if self.tiles[val.0][val.1-1].revealed == false && visited[val.0][val.1-1] == false {vec.push((val.0, val.1-1)); visited[val.0][val.1-1] = true;}
                                 }
                                 if val.1 < self.y-1 {
-                                    if self.tiles[val.0][val.1+1].revealed == false {vec.push((val.0, val.1+1));}
+                                    if self.tiles[val.0][val.1+1].revealed == false && visited[val.0][val.1+1] == false {vec.push((val.0, val.1+1)); visited[val.0][val.1+1] = true;}
                                 }
                                 if val.0 < self.x-1 && val.1 > 0 {
-                                    if self.tiles[val.0+1][val.1-1].revealed == false {vec.push((val.0+1, val.1-1));}
+                                    if self.tiles[val.0+1][val.1-1].revealed == false && visited[val.0+1][val.1-1] == false {vec.push((val.0+1, val.1-1)); visited[val.0+1][val.1-1] = true;}
                                 }
                                 if val.0 < self.x-1 {
-                                    if self.tiles[val.0+1][val.1].revealed == false {vec.push((val.0+1, val.1));}
+                                    if self.tiles[val.0+1][val.1].revealed == false && visited[val.0+1][val.1] == false {vec.push((val.0+1, val.1)); visited[val.0+1][val.1] = true;}
                                 }
                                 if val.0 < self.x-1 && val.1 < self.y-1 {
-                                    if self.tiles[val.0+1][val.1+1].revealed == false {vec.push((val.0+1, val.1+1));}
+                                    if self.tiles[val.0+1][val.1+1].revealed == false && visited[val.0+1][val.1+1] == false {vec.push((val.0+1, val.1+1)); visited[val.0+1][val.1+1] = true;}
                                 }
                             }
                         },
                         None => break,
                     }
                 }
-
+                println!("Bombs: {}, Revealed: {}, in {} Tiles", self.bombs, self.revealed_tiles, self.y*self.x);
                 if self.tiles[input.0][input.1].bomb{bs = BoardState::Loss;}
                 else if (self.bombs as u16 + self.revealed_tiles) as usize == self.x * self.y {bs = BoardState::Win;}
             }

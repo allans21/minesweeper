@@ -15,8 +15,8 @@ impl GameMaster{
     }
 
     pub fn generate_board(&mut self){
-        //in future prompt interface for board size here, for now we will do 15x15 with 20 bombs
-        self.board = Board::generate(15,15,15);
+        //TODO prompt size
+        self.board = Board::generate(1,8,8);
     }
     fn play_round(&mut self) -> board::BoardState{
         self.render_engine.render_board(&self.board);
