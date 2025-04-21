@@ -16,10 +16,10 @@ impl GameMaster{
 
     pub fn generate_board(&mut self){
         //TODO prompt size
-        self.board = Board::generate(1,8,8);
+        self.board = Board::generate(3,8,8);
     }
     fn play_round(&mut self) -> board::BoardState{
-        self.render_engine.render_board(&self.board);
+        self.render_engine.render_board(&self.board, false);
         let user_input = self.user_interface.process_input();
         return self.board.update(&user_input);
     }
@@ -29,10 +29,12 @@ impl GameMaster{
             match self.play_round(){
                 board::BoardState::Win=>{
                     self.render_engine.winner();
+                    self.render_engine.render_board(&self.board, true);
                     break;
                 }
                 board::BoardState::Loss=>{
                     self.render_engine.loser();
+                    self.render_engine.render_board(&self.board, true);
                     break;
                 }
                 board::BoardState::Ongoing=>{}

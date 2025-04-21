@@ -25,10 +25,10 @@ impl Default for TileDisplay{
 pub struct CLIRender;
 
 impl Render for CLIRender{
-    fn render_board( &self, board: &Board){
+    fn render_board( &self, board: &Board, reveal: bool){
         print_hor(board.x);
         for i in 0..board.tiles.len(){
-            print_tiles(&board.tiles[i]);
+            print_tiles(&board.tiles[i], reveal, i as u8);
         }
         print_hor(board.x);
     }
@@ -38,23 +38,24 @@ impl Render for CLIRender{
     }
 
     fn loser(&self){
-        println!("YOU DIEDED");
+        println!("YOU DIED");
     }
 }
 
 fn print_hor(len: usize){
+    print!("  "); // For Vertical spacing
     for i in 0..len{
         print!(" {}", i);
     }
     println!();
 }
 
-fn print_tiles(tiles: &Vec<Tile>){
+fn print_tiles(tiles: &Vec<Tile>, reveal: bool, row: u8){
     let basic: TileDisplay = Default::default();
-
+    print!("{} ", (row+65) as char);
     for i in 0..tiles.len(){
         print!("|");
-        if tiles[i].revealed {
+        if tiles[i].revealed || reveal {
             if tiles[i].bomb{
                 print!("{}", basic.bomb);
             }
