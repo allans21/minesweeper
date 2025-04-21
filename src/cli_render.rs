@@ -50,7 +50,7 @@ fn print_hor(len: usize){
     println!();
 }
 
-fn print_tiles(tiles: &Vec<Tile>, reveal: bool, row: u8){
+fn print_tiles(tiles: &Vec<Tile>, reveal: bool, row: u8){ //TODO handle numbers greater than 9 for spacing
     let basic: TileDisplay = Default::default();
     print!("{} ", (row+65) as char);
     for i in 0..tiles.len(){

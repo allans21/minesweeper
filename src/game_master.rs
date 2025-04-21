@@ -15,8 +15,12 @@ impl GameMaster{
     }
 
     pub fn generate_board(&mut self){
-        //TODO prompt size
-        self.board = Board::generate(3,8,8);
+        let mut init_vals:(usize, usize, u8) = (0,0,0);
+
+        while init_vals.0 ==0{
+            init_vals = self.user_interface.get_difficulty(); //TODO, replace this with proper error handling
+        }
+        self.board = Board::generate(init_vals.0,init_vals.1,init_vals.2,);
     }
     fn play_round(&mut self) -> board::BoardState{
         self.render_engine.render_board(&self.board, false);

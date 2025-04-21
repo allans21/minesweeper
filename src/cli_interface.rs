@@ -10,8 +10,6 @@ impl Interface for CLIInterface{
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read line");
 
-        println!("Your input: {}",  input);
-
         let process: Vec<&str> =input.split(":").collect();
 
         let mut opt = interface::Interactions::ParseError;
@@ -32,5 +30,23 @@ impl Interface for CLIInterface{
         }
 
         return (x, y, opt);
+    }
+
+    fn get_difficulty(&self) -> (usize, usize, u8) {
+        println!("Would you like to play Easy (9x9, 10 bombs), Medium(16x16, 40 Bombs) or Hard(16x30, 99 bombs)?");
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Failed to read line");
+        let s = &input[..input.len()-2]; //cut off whatever the new line char is TODO find this char
+        println!("Your input: {}",  s);
+
+        match s {
+            "Easy"=>{return (9,9,10);},
+            "Medium"=>{return (16,16,40);},
+            "Hard"=>{return (16,30,99);},
+            &_=>{
+                println!("ERROR! Did not recognize string: {}",  input);
+                return (0,0,0);
+            }, //TODO make this a proper error handling
+        }
     }
 }

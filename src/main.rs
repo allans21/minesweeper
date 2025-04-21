@@ -9,9 +9,9 @@ mod game_master;
 fn main() {
     let cli = Box::new(cli_render::CLIRender{});
     let user_interface = Box::new(cli_interface::CLIInterface{});
-    let mut GM: game_master::GameMaster = game_master::GameMaster::new(user_interface, cli);
-    GM.generate_board();
+    let mut gm: game_master::GameMaster = game_master::GameMaster::new(user_interface, cli);
+    gm.generate_board();
 
-    GM.play_game();
+    gm.play_game();
 
 }

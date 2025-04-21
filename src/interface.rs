@@ -17,5 +17,6 @@ impl fmt::Display for Interactions {
 }
 
 pub trait Interface{
-    fn process_input(&self) -> (usize, usize, Interactions);
+    fn process_input(&self) -> (usize, usize, Interactions); //X, Y, Click/Flag
+    fn get_difficulty(&self) -> (usize, usize, u8); //X, Y, Bombs
 }

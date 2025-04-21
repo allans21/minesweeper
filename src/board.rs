@@ -2,7 +2,7 @@ use crate::interface::Interactions;
 use rand::Rng;
 
 #[derive(Clone, Default)]
-pub struct Tile { // TODO replace flag and revealed with a String/char. this will either be hidden, bomb or the number of bomb neighbors
+pub struct Tile {
     pub bomb: bool,
     pub revealed: bool,
     pub flag: bool,
@@ -24,7 +24,7 @@ pub enum BoardState{
 }
 
 impl Board {
-    pub fn generate(b: u8, x_val: usize, y_val :usize)->Board {
+    pub fn generate( x_val: usize, y_val :usize, b: u8)->Board {
         let mut board = Board {
             bombs: b,
             revealed_tiles: 0,
@@ -86,7 +86,7 @@ impl Board {
         println!("Enter guess in the form Letter:Number:C/F"); //TODO this should be moved to the cli_interface
         let mut bs: BoardState = BoardState::Ongoing;
         match input.2{
-            Interactions::Click=>{
+            Interactions::Click=>{ //TODO add no click on active flag
                 //reveal clicked tile and every tile next to it that is not touching a bomb
                 let mut vec = Vec::new();
                 let mut visited: Vec<Vec<bool>> = vec![vec![false; self.x]; self.y];
@@ -130,11 +130,11 @@ impl Board {
                         None => break,
                     }
                 }
-                println!("Bombs: {}, Revealed: {}, in {} Tiles", self.bombs, self.revealed_tiles, self.y*self.x);
+                println!("Bombs: {}, Revealed: {}, in {} Tiles", self.bombs, self.revealed_tiles, self.y*self.x); // TODO move to cli_interface
                 if self.tiles[input.0][input.1].bomb{bs = BoardState::Loss;}
                 else if (self.bombs as u16 + self.revealed_tiles) as usize == self.x * self.y {bs = BoardState::Win;}
             }
-            Interactions::Flag=>{
+            Interactions::Flag=>{ //todo add flag undo,
                 self.tiles[input.0][input.1].flag = true;
             }
             Interactions::ParseError=>{
