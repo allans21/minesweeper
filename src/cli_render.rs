@@ -31,6 +31,7 @@ impl Render for CLIRender{
             print_tiles(&board.tiles[i], reveal, i as u8);
         }
         print_hor(board.x);
+        println!("Bombs: {}, Revealed: {}, in {} Tiles", board.bombs, board.revealed_tiles, board.y*board.x);
     }
 
     fn winner(&self){

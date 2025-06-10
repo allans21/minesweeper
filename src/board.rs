@@ -83,7 +83,6 @@ impl Board {
     }
 
     pub fn update(&mut self, input: &(usize, usize, Interactions)) -> BoardState{
-        println!("Enter guess in the form Letter:Number:C/F"); //TODO this should be moved to the cli_interface
         let mut bs: BoardState = BoardState::Ongoing;
         match input.2{
             Interactions::Click=>{ //TODO add no click on active flag
@@ -130,7 +129,6 @@ impl Board {
                         None => break,
                     }
                 }
-                println!("Bombs: {}, Revealed: {}, in {} Tiles", self.bombs, self.revealed_tiles, self.y*self.x); // TODO move to cli_interface
                 if self.tiles[input.0][input.1].bomb{bs = BoardState::Loss;}
                 else if (self.bombs as u16 + self.revealed_tiles) as usize == self.x * self.y {bs = BoardState::Win;}
             }

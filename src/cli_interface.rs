@@ -17,7 +17,7 @@ impl Interface for CLIInterface{
         let mut y: usize = 0;
 
         if process.len() == 3 {
-            x = (process[0].as_bytes()[0] - 65) as usize;
+            x = (process[0].as_bytes()[0] - 65) as usize; //TODO add overflow protection
             y = process[1].parse().expect("Failed to parse second arg as int"); //TODO needs more robust check
 
             println!("{}", process[2]);

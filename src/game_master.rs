@@ -32,13 +32,13 @@ impl GameMaster{
         loop{
             match self.play_round(){
                 board::BoardState::Win=>{
-                    self.render_engine.winner();
                     self.render_engine.render_board(&self.board, true);
+                    self.render_engine.winner();
                     break;
                 }
                 board::BoardState::Loss=>{
-                    self.render_engine.loser();
                     self.render_engine.render_board(&self.board, true);
+                    self.render_engine.loser();
                     break;
                 }
                 board::BoardState::Ongoing=>{}
