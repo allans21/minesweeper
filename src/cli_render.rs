@@ -24,13 +24,15 @@ impl Default for TileDisplay{
 
 pub struct CLIRender;
 
+//Note that x is traditionally in the Y directiona and y is in the tradiational x direction here
+//This is due to logic in the board function being written in a way where this is easier to flip here
 impl Render for CLIRender{
     fn render_board( &self, board: &Board, reveal: bool){
-        print_hor(board.x);
+        print_hor(board.y);
         for i in 0..board.tiles.len(){
             print_tiles(&board.tiles[i], reveal, i as u8);
         }
-        print_hor(board.x);
+        print_hor(board.y);
         println!("Bombs: {}, Revealed: {}, in {} Tiles", board.bombs, board.revealed_tiles, board.y*board.x);
     }
 
@@ -43,15 +45,39 @@ impl Render for CLIRender{
     }
 }
 
-fn print_hor(len: usize){
-    print!("  "); // For Vertical spacing
-    for i in 0..len{
-        print!(" {}", i);
+fn pow(n: usize, p: usize) -> usize{
+    let mut num:usize = n;
+    if p == 0{
+        return 1;
     }
-    println!();
+    for _i in 1..p{
+        num = num*n; 
+    }
+    return num;
 }
 
-fn print_tiles(tiles: &Vec<Tile>, reveal: bool, row: u8){ //TODO handle numbers greater than 9 for spacing
+fn print_hor(len: usize){
+    let mut loops:usize = 1;
+    let mut num:usize = len;
+    while num/10 > 0{
+        num = num/10;
+        loops += 1; 
+    }
+
+    for l in 0..loops{
+        print!("  ");
+        for i in 0..len{
+            let p = pow(10, loops-l-1);
+            let mut prnt = i/p;
+            prnt = prnt%(p*10);
+            
+            print!(" {}", prnt);
+        }
+        println!();
+    }
+}
+
+fn print_tiles(tiles: &Vec<Tile>, reveal: bool, row: u8){ //TODO handle numbers greater than 9 for spacing, print vertically
     let basic: TileDisplay = Default::default();
     print!("{} ", (row+65) as char);
     for i in 0..tiles.len(){

@@ -28,7 +28,7 @@ impl Board {
         let mut board = Board {
             bombs: b,
             revealed_tiles: 0,
-            tiles: vec![vec![Tile::default(); x_val]; y_val],
+            tiles: vec![vec![Tile::default(); y_val]; x_val],
             x: x_val,
             y: y_val,
         };
@@ -140,7 +140,7 @@ impl Board {
                 else {self.tiles[input.0][input.1].flag = true;}
             }
             Interactions::ParseError=>{
-                println!("Error with input, no change made"); //TODO, this needs to be controlled by the interface
+                println!("Error with input, no change made"); //TODO, this needs to be controlled by the interface, perhaps using Result? 
             }
         }
         return bs;

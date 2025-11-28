@@ -7,6 +7,7 @@ mod game_master;
 
 
 fn main() {
+    //todo, combine user interface and cli render? How will this work with a gui
     let cli = Box::new(cli_render::CLIRender{});
     let user_interface = Box::new(cli_interface::CLIInterface{});
     let mut gm: game_master::GameMaster = game_master::GameMaster::new(user_interface, cli);

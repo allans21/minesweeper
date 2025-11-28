@@ -43,6 +43,7 @@ impl Interface for CLIInterface{
             "Easy"=>{return (9,9,10);},
             "Medium"=>{return (16,16,40);},
             "Hard"=>{return (16,30,99);},
+            "Mega"=>{return (99,99,99);},
             &_=>{
                 println!("ERROR! Did not recognize string: {}",  input);
                 return (0,0,0);
